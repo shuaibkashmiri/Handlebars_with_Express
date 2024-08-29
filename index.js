@@ -1,14 +1,19 @@
 const express= require("express")
-const port =5000;
 const path = require("path")
 const xhbs =require("express-handlebars");
 const bodyParser = require("body-parser");
-const { handleSignup, handleLogin } = require("./controllers/userController");
+const cookie = require("cookie-parser")
+const { handleSignup, handleLogin } = require("./controllers/Backend_controllers/userController");
 const connectDb = require("./utils/connectDb");
+const { renderIndex, renderLogin, renderSignup, renderDashboard } = require("./controllers/page_controllers/pageController");
+const isAuthenticated = require("./controllers/MiddleWares/auth");
+require('dotenv').config();
+const port=process.env.PORT;
 const server = express()
 // MiddleWares
 server.use(express.static(path.join(__dirname,"public")))
 server.use(bodyParser());
+server.use(cookie())
 
 server.engine("hbs", xhbs.engine({
     extname:"hbs",
@@ -21,19 +26,11 @@ server.set('view engine', 'hbs')
 server.set("views",path.join(__dirname,"views","pages"))
 
 
-server.get("/",(req,res)=>{
-    res.render("index.hbs")
-})
-server.get("/login",(req,res)=>{
-    res.render("login.hbs")
-})  
-server.get("/signup",(req,res)=>{
-    res.render("signup.hbs")
-})
+server.get("/",renderIndex)
+server.get("/login",renderLogin)  
+server.get("/signup",renderSignup)
 
-server.get("/dashboard",(req,res)=>{
-    res.render("dashboard.hbs")
-})
+server.get("/dashboard",isAuthenticated,renderDashboard)
 
 
 

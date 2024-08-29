@@ -1,12 +1,13 @@
-const { log } = require("handlebars");
 const mongoose =require ("mongoose");
+require('dotenv').config();
+const url=process.env.MONGO_URL;
 
 const connectDb=async ()=>{
-    const connection =await mongoose.connect("mongodb://localhost:27017/hbs")
+    const connection =await mongoose.connect(url)
     if(connection){
-        console.log("Db Connected")
+        console.log("DB Connected ")
     }else{
-        console.log("some Error")
+        console.log("Some Error")
     }
 }
 
