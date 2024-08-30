@@ -3,7 +3,7 @@ const path = require("path")
 const xhbs =require("express-handlebars");
 const bodyParser = require("body-parser");
 const cookie = require("cookie-parser")
-const { handleSignup, handleLogin } = require("./controllers/Backend_controllers/userController");
+const { handleSignup, handleLogin, getUserDetails } = require("./controllers/Backend_controllers/userController");
 const connectDb = require("./utils/connectDb");
 const { renderIndex, renderLogin, renderSignup, renderDashboard } = require("./controllers/page_controllers/pageController");
 const isAuthenticated = require("./controllers/MiddleWares/auth");
@@ -32,6 +32,7 @@ server.get("/login",renderLogin)
 server.get("/signup",renderSignup)
 
 server.get("/dashboard",isAuthenticated,renderDashboard)
+server.get("/getUserDetails",isAuthenticated,getUserDetails)
 
 
 
@@ -39,6 +40,7 @@ server.get("/dashboard",isAuthenticated,renderDashboard)
 //Post routes for user
 server.post("/signup",handleSignup)
 server.post("/login",handleLogin)
+
 
 
 

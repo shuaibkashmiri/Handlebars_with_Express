@@ -62,4 +62,17 @@ const handleLogin=async(req,res)=>{
     console.log(error)
    }}
 
-module.exports={handleSignup,handleLogin};
+
+   const getUserDetails=async(req,res)=>{
+    try {
+        const _id=req.user;
+        const findUser=await User.findById(_id);
+        if(_id){
+            res.json({user:findUser})
+        }
+    } catch (error) {
+        console.log(error)
+    }
+   }
+
+module.exports={handleSignup,handleLogin,getUserDetails};
