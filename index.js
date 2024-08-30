@@ -12,7 +12,8 @@ const port=process.env.PORT;
 const server = express()
 // MiddleWares
 server.use(express.static(path.join(__dirname,"public")))
-server.use(bodyParser());
+server.use(bodyParser.urlencoded({extended :false}) );
+server.use(express.json())
 server.use(cookie())
 
 server.engine("hbs", xhbs.engine({

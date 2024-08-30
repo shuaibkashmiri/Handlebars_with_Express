@@ -12,7 +12,7 @@ const isAuthenticated=async(req,res,next)=>{
     }
     await jwt.verify(token,secretKey,(error,resolve)=>{
         if(error){
-            return renderHandler(res,401,"Not verified login again","login")
+            return renderHandler(res,403,"Not verified login again","login")
         }
         req.user=resolve._id
         return next()
