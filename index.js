@@ -3,10 +3,10 @@ const path = require("path")
 const xhbs =require("express-handlebars");
 const bodyParser = require("body-parser");
 const cookie = require("cookie-parser")
-const { handleSignup, handleLogin, getUserDetails } = require("./controllers/Backend_controllers/userController");
+const { handleSignup, handleLogin, editUser } = require("./controllers/Backend_controllers/userController");
 const connectDb = require("./utils/connectDb");
-const { renderIndex, renderLogin, renderSignup, renderDashboard } = require("./controllers/page_controllers/pageController");
-const isAuthenticated = require("./controllers/MiddleWares/auth");
+const { renderIndex, renderLogin, renderSignup, renderDashboard, adminDashboard } = require("./controllers/page_controllers/pageController");
+const {isAuthenticated, isAdmin} = require("./controllers/MiddleWares/auth");
 require('dotenv').config();
 const port=process.env.PORT;
 const server = express()
@@ -32,16 +32,13 @@ server.get("/login",renderLogin)
 server.get("/signup",renderSignup)
 
 server.get("/dashboard",isAuthenticated,renderDashboard)
-server.get("/getUserDetails",isAuthenticated,getUserDetails)
-
-
-
-
+server.get("/admin/dashboard",isAuthenticated,isAdmin,adminDashboard)
 //Post routes for user
 server.post("/signup",handleSignup)
 server.post("/login",handleLogin)
 
-
+//Put routes for user
+server.put("/user/edit",isAuthenticated,editUser);
 
 
 server.listen(port,()=>{

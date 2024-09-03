@@ -23,4 +23,17 @@ const isAuthenticated=async(req,res,next)=>{
    }
 }
 
-module.exports=isAuthenticated;
+const isAdmin =async(req,res,next)=>{
+const userId =req.user;
+// seeding id of admin
+
+if(userId !=="66d5f65bda1abf2dda1ffbaf"){
+    return renderHandler(res,401,"Unauthorised to Access","login")
+}else{
+    return next()
+}
+}
+
+
+
+module.exports={isAuthenticated, isAdmin}

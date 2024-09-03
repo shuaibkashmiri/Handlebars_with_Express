@@ -27,6 +27,7 @@ const handleSignup=async(req,res)=>{
         });
         if(newUser){
             res.render("signup",{success:"User Created Sucessfully"})
+            res.json({msg:"user created"})
         }
         
     } catch (error) {
@@ -37,6 +38,9 @@ const handleSignup=async(req,res)=>{
 
 const handleLogin=async(req,res)=>{
    try {
+    //seeding admin
+    const AdminEmail="shoaib@gmail.com";
+    const AdminPassword="12345"
     const {email,password}=req.body;
     if(email===""|| password===""){
         return renderHandler(res, 400 ,"All credentials Required!" , "login")
@@ -53,7 +57,13 @@ const handleLogin=async(req,res)=>{
     const token=await jwt.sign({_id:findUser._id},secretKey);
     if(token){
         res.cookie("token",token);
-        res.redirect("dashboard")
+
+        if(email===AdminEmail&&password===AdminPassword){
+            res.redirect("/admin/dashboard");
+        }else{
+            res.redirect("dashboard")
+        }
+       
     }
     
    
@@ -63,16 +73,41 @@ const handleLogin=async(req,res)=>{
    }}
 
 
-   const getUserDetails=async(req,res)=>{
+//    const getUserDetails=async(req,res)=>{
+//     try {
+//         const _id=req.user;
+//         const findUser=await User.findById(_id);
+//         if(_id){
+//             res.json({user:findUser})
+//         }
+//     } catch (error) {
+//         console.log(error)
+//     }
+//    }
+
+   const editUser =async(req,res)=>{
     try {
-        const _id=req.user;
-        const findUser=await User.findById(_id);
-        if(_id){
-            res.json({user:findUser})
+     
+        const { fullname, email,profilePicUrl} = req.body;
+        const _id = req.user;
+        const findUser = await User.findById(_id);
+        console.log(findUser)
+        if (findUser) {
+            const editUser = await User.findByIdAndUpdate(_id,{
+                email,
+                fullname,
+                profilePicUrl
+              });
+              if (editUser) {
+                res.json({msg:"User details Updated Succesfully!"});
+              } 
+        }else{
+            res.json({msg:"no User"})
         }
+
     } catch (error) {
         console.log(error)
     }
    }
 
-module.exports={handleSignup,handleLogin,getUserDetails};
+module.exports={handleSignup,handleLogin,editUser};

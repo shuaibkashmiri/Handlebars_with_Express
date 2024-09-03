@@ -1,3 +1,5 @@
+const User = require("../../models/userModel")
+
 const renderIndex=(req,res)=>{
     res.render("index.hbs")
 }
@@ -13,8 +15,19 @@ const renderLogin=(req,res)=>{
 
 //secure Pages
 
-const renderDashboard=(req,res)=>{
-    res.render("dashboard.hbs")
+const renderDashboard= async (req,res)=>{
+    try {
+        const _id =req.user
+        res.render("dashboard");
+    } catch (error) {
+        console.log(error)
+    }
+    
 }
 
-module.exports={renderIndex,renderSignup,renderLogin,renderDashboard}
+const adminDashboard=async(req,res)=>{
+    
+res.render("adminDashboard")
+}
+
+module.exports={renderIndex,renderSignup,renderLogin,renderDashboard,adminDashboard}
