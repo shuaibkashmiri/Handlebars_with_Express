@@ -61,7 +61,7 @@ const handleLogin=async(req,res)=>{
         if(email===AdminEmail&&password===AdminPassword){
             res.redirect("/admin/dashboard");
         }else{
-            res.redirect("dashboard")
+            res.redirect("dashboard")   
         }
        
     }
